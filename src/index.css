@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .animate-particle {
+    animation: particle 1.5s ease-out forwards;
+  }
+  .animate-shimmer {
+    animation: shimmer 3s infinite;
+  }
+}
+
+@keyframes particle {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(
+      calc((var(--random-x, 50) - 50) * 3px),
+      calc((var(--random-y, 50) - 50) * 3px - 100px)
+    ) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Prevent text selection during gameplay */
+.select-none {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Prevent double-tap zoom on mobile */
+button {
+  touch-action: manipulation;
+}
+
+body {
+  overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
