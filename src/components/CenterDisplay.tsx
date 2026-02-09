@@ -23,7 +23,7 @@ export function CenterDisplay({ gameState, level, score }: CenterDisplayProps) {
         {gameState === 'idle' ? (
           <div className="text-center">
             <div className="text-xl sm:text-2xl">🎵</div>
-            <div className="text-[8px] text-slate-500 mt-0.5 font-medium">SIMON</div>
+            <div className="text-[8px] text-slate-500 mt-0.5 font-medium">REFLEXA</div>
           </div>
         ) : gameState === 'failed' ? (
           <div className="text-center">
@@ -34,6 +34,11 @@ export function CenterDisplay({ gameState, level, score }: CenterDisplayProps) {
           <div className="text-center">
             <div className="text-lg sm:text-xl font-black text-yellow-400">{level}</div>
             <div className="text-[8px] text-yellow-400/60 font-bold">LEVEL UP!</div>
+          </div>
+        ) : gameState === 'showing' ? (
+          <div className="text-center">
+            <div className="text-xl sm:text-2xl animate-pulse">👀</div>
+            <div className="text-[8px] text-amber-400 mt-0.5 font-bold">WATCH</div>
           </div>
         ) : (
           <div className="text-center">

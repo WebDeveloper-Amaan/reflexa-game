@@ -61,23 +61,25 @@ export function useSimonGame() {
   const showSequence = useCallback((sequence: number[], difficulty: Difficulty) => {
     setState(prev => ({ ...prev, gameState: 'showing', activeButton: null }));
     const speed = DIFFICULTY_SPEEDS[difficulty];
+    const gap = 400; // Longer gap for better visibility
+    const initialDelay = 600; // Delay before first flash
 
     sequence.forEach((colorIndex, i) => {
       const showTimeout = setTimeout(() => {
         setState(prev => ({ ...prev, activeButton: colorIndex }));
-        playTone(colorIndex, speed * 0.8);
-      }, (i + 1) * (speed + 200));
+        playTone(colorIndex, speed);
+      }, initialDelay + i * (speed + gap));
 
       const hideTimeout = setTimeout(() => {
         setState(prev => ({ ...prev, activeButton: null }));
-      }, (i + 1) * (speed + 200) + speed);
+      }, initialDelay + i * (speed + gap) + speed);
 
       timeoutRef.current.push(showTimeout, hideTimeout);
     });
 
     const finishTimeout = setTimeout(() => {
       setState(prev => ({ ...prev, gameState: 'playing', activeButton: null }));
-    }, (sequence.length + 1) * (speed + 200) + 100);
+    }, initialDelay + sequence.length * (speed + gap) + 200);
 
     timeoutRef.current.push(finishTimeout);
   }, []);
@@ -89,7 +91,7 @@ export function useSimonGame() {
       ...prev,
       sequence: newSequence,
       playerSequence: [],
-      gameState: 'showing',
+      gameState: 'idle',
       level: 1,
       score: 0,
       streak: 0,
@@ -98,7 +100,7 @@ export function useSimonGame() {
 
     setTimeout(() => {
       showSequence(newSequence, state.difficulty);
-    }, 500);
+    }, 400);
   }, [clearTimeouts, generateNext, showSequence, state.difficulty]);
 
   const handlePlayerInput = useCallback((colorIndex: number) => {
