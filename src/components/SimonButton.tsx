@@ -4,6 +4,7 @@ interface SimonButtonProps {
   colorIndex: number;
   isActive: boolean;
   isDisabled: boolean;
+  isKeyPressed?: boolean;
   onClick: (colorIndex: number) => void;
 }
 
@@ -14,6 +15,7 @@ const BUTTON_CONFIGS = [
     glowColor: 'rgba(74, 222, 128, 0.6)',
     border: 'border-green-700',
     position: 'rounded-tl-[120px] sm:rounded-tl-[180px] rounded-tr-lg rounded-br-lg rounded-bl-lg',
+    key: 'A',
   },
   {
     base: 'from-red-500 to-red-600',
@@ -21,6 +23,7 @@ const BUTTON_CONFIGS = [
     glowColor: 'rgba(248, 113, 113, 0.6)',
     border: 'border-red-700',
     position: 'rounded-tl-lg rounded-tr-[120px] sm:rounded-tr-[180px] rounded-br-lg rounded-bl-lg',
+    key: 'W',
   },
   {
     base: 'from-yellow-400 to-yellow-500',
@@ -28,6 +31,7 @@ const BUTTON_CONFIGS = [
     glowColor: 'rgba(250, 204, 21, 0.6)',
     border: 'border-yellow-600',
     position: 'rounded-tl-lg rounded-tr-lg rounded-br-lg rounded-bl-[120px] sm:rounded-bl-[180px]',
+    key: 'S',
   },
   {
     base: 'from-blue-500 to-blue-600',
@@ -35,14 +39,15 @@ const BUTTON_CONFIGS = [
     glowColor: 'rgba(96, 165, 250, 0.6)',
     border: 'border-blue-700',
     position: 'rounded-tl-lg rounded-tr-lg rounded-br-[120px] sm:rounded-br-[180px] rounded-bl-lg',
+    key: 'D',
   },
 ];
 
-export function SimonButton({ colorIndex, isActive, isDisabled, onClick }: SimonButtonProps) {
+export function SimonButton({ colorIndex, isActive, isDisabled, isKeyPressed = false, onClick }: SimonButtonProps) {
   const [isPressed, setIsPressed] = useState(false);
   const lastClickTime = useRef(0);
   const config = BUTTON_CONFIGS[colorIndex];
-  const lit = isActive || isPressed;
+  const lit = isActive || isPressed || isKeyPressed;
 
   const handleClick = useCallback(() => {
     if (isDisabled) return;
@@ -86,6 +91,9 @@ export function SimonButton({ colorIndex, isActive, isDisabled, onClick }: Simon
         pointer-events-none transition-opacity duration-75
         ${lit ? 'opacity-50' : 'opacity-30'}
       `} />
+      <span className="absolute inset-0 hidden sm:flex items-center justify-center text-sm font-black text-white/40 select-none pointer-events-none">
+        {config.key}
+      </span>
     </button>
   );
 }

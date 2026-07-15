@@ -6,10 +6,28 @@ import { CenterDisplay } from '@/components/CenterDisplay';
 import { WelcomeModal } from '@/components/WelcomeModal';
 import { useEffect, useState } from 'react';
 
+const KEY_MAP: Record<string, number> = { a: 0, w: 1, s: 2, d: 3 };
+
 export function App() {
   const game = useSimonGame();
   const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; color: string }>>([]);
   const [showWelcome, setShowWelcome] = useState(false);
+  const [pressedIndex, setPressedIndex] = useState<number | null>(null);
+
+  // Keyboard shortcut support: A=green, W=red, S=yellow, D=blue
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.repeat) return;
+      const index = KEY_MAP[e.key.toLowerCase()];
+      if (index !== undefined) {
+        setPressedIndex(index);
+        game.handlePlayerInput(index);
+        setTimeout(() => setPressedIndex(null), 150);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [game.handlePlayerInput]);
 
   // Check if first visit
   useEffect(() => {
@@ -104,7 +122,7 @@ export function App() {
             {isShowingOrLevelUp
               ? '🔊 LISTEN & WATCH CAREFULLY'
               : isPlaying
-              ? '👆 REPEAT THE PATTERN'
+              ? '👆 CLICK OR PRESS A · W · S · D'
               : '🎮 PRESS START TO PLAY'
             }
           </p>
@@ -126,24 +144,28 @@ export function App() {
               colorIndex={0}
               isActive={game.activeButton === 0}
               isDisabled={!isPlaying}
+              isKeyPressed={pressedIndex === 0}
               onClick={game.handlePlayerInput}
             />
             <SimonButton
               colorIndex={1}
               isActive={game.activeButton === 1}
               isDisabled={!isPlaying}
+              isKeyPressed={pressedIndex === 1}
               onClick={game.handlePlayerInput}
             />
             <SimonButton
               colorIndex={2}
               isActive={game.activeButton === 2}
               isDisabled={!isPlaying}
+              isKeyPressed={pressedIndex === 2}
               onClick={game.handlePlayerInput}
             />
             <SimonButton
               colorIndex={3}
               isActive={game.activeButton === 3}
               isDisabled={!isPlaying}
+              isKeyPressed={pressedIndex === 3}
               onClick={game.handlePlayerInput}
             />
 

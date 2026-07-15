@@ -7,8 +7,8 @@ export interface GameRecord {
   streak: number;
 }
 
-const STORAGE_KEY = 'simon-says-records';
-const HIGH_SCORE_KEY = 'simon-says-highscore';
+const STORAGE_KEY = import.meta.env.VITE_STORAGE_KEY ?? 'simon-says-records';
+const HIGH_SCORE_KEY = import.meta.env.VITE_HIGH_SCORE_KEY ?? 'simon-says-highscore';
 
 export function saveGameRecord(record: GameRecord): void {
   try {
